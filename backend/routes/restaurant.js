@@ -1,0 +1,31 @@
+const express = require("express");
+const router = express.Router({ mergeParams: true });
+
+const {
+  getAllRestaurants,
+  createRestaurant,
+  getRestaurant,
+  deleteRestaurant,
+  generateReviewSummary,
+} = require("../controllers/restaurantController");
+
+const { protect } = require("../controllers/authController");
+const { authorizeRoles } = require("../middlewares/authorizeRoles");
+
+const menuRoutes = require("./menu");
+
+router
+  .route("/")
+  .get(getAllRestaurants)
+  .post(protect, authorizeRoles("admin"), createRestaurant);
+
+router.get("/:storeId/ai-summary", generateReviewSummary);
+
+router
+  .route("/:storeId")
+  .get(getRestaurant)
+  .delete(protect, authorizeRoles("admin"), deleteRestaurant);
+
+router.use("/:storeId/menus", menuRoutes);
+
+module.exports = router;

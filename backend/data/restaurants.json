@@ -1,0 +1,149 @@
+[
+  {
+    "_id": "66716cb0e1a78e67dc8c8dbf",
+    "name": "Mani's Chaat Corner",
+    "isVeg": true,
+    "address": "42 Brigade Road, Bangalore",
+    "ratings": 4.6,
+    "numOfReviews": 248,
+    "location": { "type": "Point", "coordinates": [77.6033, 12.9716] },
+    "images": [
+      {
+        "public_id": "mani_chaat",
+        "url": "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Priya S", "rating": 5, "Comment": "Amazing pani puri — best chaat in town!" },
+      { "name": "Rahul K", "rating": 4, "Comment": "Fresh, tangy and delicious street food." }
+    ]
+  },
+  {
+    "_id": "6671719fe1a78e67dc8c8dce",
+    "name": "Thalappakatti Biryani",
+    "isVeg": false,
+    "address": "88 Koramangala 5th Block, Bangalore",
+    "ratings": 4.8,
+    "numOfReviews": 512,
+    "location": { "type": "Point", "coordinates": [77.6245, 12.9352] },
+    "images": [
+      {
+        "public_id": "thalappa",
+        "url": "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Anita M", "rating": 5, "Comment": "Excellent biryani — aromatic and perfectly spiced." },
+      { "name": "Vikram P", "rating": 5, "Comment": "Best mutton biryani I have ever tasted!" }
+    ]
+  },
+  {
+    "_id": "667167a4a0215dd827e9d81e",
+    "name": "Spice Garden",
+    "isVeg": false,
+    "address": "15 Indiranagar 100ft Road, Bangalore",
+    "ratings": 4.4,
+    "numOfReviews": 186,
+    "location": { "type": "Point", "coordinates": [77.6412, 12.9784] },
+    "images": [
+      {
+        "public_id": "spice_garden",
+        "url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Neha R", "rating": 4, "Comment": "Great flavors and warm hospitality." }
+    ]
+  },
+  {
+    "_id": "667164e6bd4249c429fee778",
+    "name": "KFC - MG Road",
+    "isVeg": false,
+    "address": "MG Road Metro Station, Bangalore",
+    "ratings": 4.2,
+    "numOfReviews": 890,
+    "location": { "type": "Point", "coordinates": [77.6064, 12.9758] },
+    "images": [
+      {
+        "public_id": "kfc",
+        "url": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Arjun T", "rating": 4, "Comment": "Crispy chicken and fast service." },
+      { "name": "Sneha L", "rating": 4, "Comment": "Love the zinger burger — always tasty." }
+    ]
+  },
+  {
+    "_id": "66716f8c945c5a8b80d4631e",
+    "name": "Punjabi Dhaba",
+    "isVeg": false,
+    "address": "22 HSR Layout Sector 2, Bangalore",
+    "ratings": 4.5,
+    "numOfReviews": 324,
+    "location": { "type": "Point", "coordinates": [77.6389, 12.9116] },
+    "images": [
+      {
+        "public_id": "punjabi",
+        "url": "https://images.unsplash.com/photo-1585937421612-70a008356fbe?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Harpreet S", "rating": 5, "Comment": "Authentic dhaba taste — buttery parathas are amazing!" }
+    ]
+  },
+  {
+    "_id": "667176756b69467538f24983",
+    "name": "Royal Curry House",
+    "isVeg": false,
+    "address": "7 Whitefield Main Road, Bangalore",
+    "ratings": 4.3,
+    "numOfReviews": 210,
+    "location": { "type": "Point", "coordinates": [77.7499, 12.9698] },
+    "images": [
+      {
+        "public_id": "royal",
+        "url": "https://images.unsplash.com/photo-1552566626-52f8b828add9?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Deepak N", "rating": 4, "Comment": "Comforting curries with rich gravy." }
+    ]
+  },
+  {
+    "_id": "66717b16e1a78e67dc8c8df1",
+    "name": "Meghana Biryani",
+    "isVeg": false,
+    "address": "Residency Road, Bangalore",
+    "ratings": 4.7,
+    "numOfReviews": 678,
+    "location": { "type": "Point", "coordinates": [77.601, 12.9698] },
+    "images": [
+      {
+        "public_id": "meghana",
+        "url": "https://images.unsplash.com/photo-1589302168068-964661a54724?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Kiran V", "rating": 5, "Comment": "Signature biryani is spicy and absolutely delicious." }
+    ]
+  },
+  {
+    "_id": "667158dec45b2f6c5ad027d3",
+    "name": "Tokyo Sushi Bar",
+    "isVeg": false,
+    "address": "UB City Mall, Vittal Mallya Road, Bangalore",
+    "ratings": 4.6,
+    "numOfReviews": 156,
+    "location": { "type": "Point", "coordinates": [77.5963, 12.9716] },
+    "images": [
+      {
+        "public_id": "sushi",
+        "url": "https://images.unsplash.com/photo-1579871494447-3531ff91cc55?w=600&h=400&fit=crop"
+      }
+    ],
+    "reviews": [
+      { "name": "Yuki H", "rating": 5, "Comment": "Fresh sushi and premium presentation." }
+    ]
+  }
+]
