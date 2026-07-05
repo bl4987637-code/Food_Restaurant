@@ -1,11 +1,11 @@
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 
-// Stripe should be initialized with env vars already loaded by server.js
-const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
+// Stripe initialized lazily so env vars are guaranteed to be loaded
 
 
-//process paymnet api
+//process payment api
 exports.processPayment = catchAsyncErrors(async(req,res,next)=>{
+    const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
     console.log(req.body)
 
     //create stripe checkout session
