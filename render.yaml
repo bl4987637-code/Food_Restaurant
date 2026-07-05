@@ -5,26 +5,18 @@ services:
     runtime: node
     rootDir: backend
     buildCommand: npm install
-    startCommand: npm start
+    startCommand: node server.js
     envVars:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 8080
+        value: 10000
       - key: FRONTEND_URL
-        sync: false   # Set this in Render dashboard after frontend is deployed
-      # Set these in the Render dashboard (do NOT hardcode secrets):
-      # - key: DB_URI
-      # - key: JWT_SECRET
-      # - key: JWT_EXPIRES_TIME
-      # - key: COOKIE_EXPIRES_TIME
-      # - key: CLOUDINARY_CLOUD_NAME
-      # - key: CLOUDINARY_API_KEY
-      # - key: CLOUDINARY_API_SECRET
-      # - key: STRIPE_SECRET_KEY
-      # - key: STRIPE_WEBHOOK_SECRET
-      # - key: SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASSWORD / SMTP_FROM_EMAIL / SMTP_FROM_NAME
-      # - key: GROQ_API_KEY
+        value: https://food-restaurant-frontend.onrender.com
+      # Set the following secrets manually in the Render dashboard:
+      # DB_URI, JWT_SECRET, JWT_EXPIRES, JWT_EXPIRES_TIME,
+      # CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET,
+      # STRIPE_SECRET_KEY, STRIPE_API_KEY, GROQ_API_KEY
 
   # ── Frontend: Vite / React Static Site ───────────────────────────────────
   - type: web
@@ -39,4 +31,4 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        sync: false   # Set to your backend Render URL, e.g. https://food-restaurant-api.onrender.com
+        value: https://food-restaurant-api.onrender.com/api

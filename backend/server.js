@@ -1,9 +1,10 @@
 const path = require("path");
 const dotenv = require("dotenv");
 
-// Setting up config file FIRST - before requiring app
-// Use absolute path to ensure it works from any directory
-dotenv.config({ path: path.join(__dirname, "config/config.env") });
+// Load .env only in non-production (Render sets env vars directly)
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config({ path: path.join(__dirname, "config/config.env") });
+}
 
 const app = require("./app");
 const connectDatabase = require("./config/database");
@@ -18,9 +19,10 @@ process.on("uncaughtException", (err) => {
 // Connecting to database
 connectDatabase();
 
-const server = app.listen(process.env.PORT, () => {
+const PORT = process.env.PORT || 10000;
+const server = app.listen(PORT, () => {
   console.log(
-    `Server started on PORT: ${process.env.PORT} in ${process.env.NODE_ENV} mode.`
+    `Server started on PORT: ${PORT} in ${process.env.NODE_ENV} mode.`
   );
 });
 

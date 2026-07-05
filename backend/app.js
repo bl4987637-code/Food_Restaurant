@@ -21,11 +21,21 @@ const cart = require("./routes/cart");
 // Middlewares
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      process.env.FRONTEND_URL,
-    ].filter(Boolean),
+    origin: function (origin, callback) {
+      const frontendUrl = (process.env.FRONTEND_URL || "").replace(/"/g, "").trim();
+      const allowed = [
+        "http://localhost:5173",
+        "http://localhost:5174",
+        frontendUrl,
+      ].filter(Boolean);
+
+      // Allow requests with no origin (mobile apps, curl, etc.) or matching origins
+      if (!origin || allowed.includes(origin) || (origin && origin.endsWith(".onrender.com"))) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
