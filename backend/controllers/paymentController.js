@@ -1,10 +1,7 @@
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 
-const dotenv = require("dotenv")
-dotenv.config({path:"./config/config.env"})
-
-const stripe =require("stripe")(process.env.STRIPE_SECRET_KEY)
-console.log("KEY",process.env.STRIPE_SECRET_KEY)
+// Stripe should be initialized with env vars already loaded by server.js
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 
 
 //process paymnet api

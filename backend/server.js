@@ -1,6 +1,12 @@
+const path = require("path");
+const dotenv = require("dotenv");
+
+// Setting up config file FIRST - before requiring app
+// Use absolute path to ensure it works from any directory
+dotenv.config({ path: path.join(__dirname, "config/config.env") });
+
 const app = require("./app");
 const connectDatabase = require("./config/database");
-const dotenv = require("dotenv");
 
 // Handle Uncaught Exceptions
 process.on("uncaughtException", (err) => {
@@ -8,9 +14,6 @@ process.on("uncaughtException", (err) => {
   console.log("Shutting down server due to uncaught exception");
   process.exit(1);
 });
-
-// Setting up config file
-dotenv.config({ path: "./config/config.env" });
 
 // Connecting to database
 connectDatabase();

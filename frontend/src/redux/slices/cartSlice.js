@@ -1,62 +1,18 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../utils/api";
+import { createSlice } from "@reduxjs/toolkit";
+import {
+  addToCart,
+  removeFromCart,
+  getCart,
+  updateCartQuantity,
+} from "../actions/cartActions";
+import { logoutUser } from "./userSlice";
 
-export const addToCart = createAsyncThunk(
-  "cart/add",
-  async ({ foodItemId, restaurantId, quantity }, { rejectWithValue }) => {
-    try {
-      const { data } = await api.post("/v1/eats/cart/add-to-cart", {
-        foodItemId,
-        restaurantId,
-        quantity,
-      });
-      return data.cart;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Unable to add to cart");
-    }
-  }
-);
-
-export const removeFromCart = createAsyncThunk(
-  "cart/remove",
-  async (foodItemId, { rejectWithValue }) => {
-    try {
-      const { data } = await api.delete("/v1/eats/cart/delete-cart-item", {
-        data: { foodItemId },
-      });
-      return data.cart ?? null;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Unable to remove item");
-    }
-  }
-);
-
-export const getCart = createAsyncThunk(
-  "cart/get",
-  async (_, { rejectWithValue }) => {
-    try {
-      const { data } = await api.get("/v1/eats/cart/get-cart");
-      return data.data;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Unable to fetch cart");
-    }
-  }
-);
-
-export const updateCartQuantity = createAsyncThunk(
-  "cart/update",
-  async ({ foodItemId, quantity }, { rejectWithValue }) => {
-    try {
-      const { data } = await api.post("/v1/eats/cart/update-cart-item", {
-        foodItemId,
-        quantity,
-      });
-      return data.cart;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message || "Unable to update cart");
-    }
-  }
-);
+export {
+  addToCart,
+  removeFromCart,
+  getCart,
+  updateCartQuantity,
+} from "../actions/cartActions";
 
 const cartSlice = createSlice({
   name: "cart",
@@ -119,6 +75,11 @@ const cartSlice = createSlice({
       .addCase(updateCartQuantity.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
+        state.cart = null;
+        state.error = null;
+        state.success = false;
       });
   },
 });

@@ -23,7 +23,12 @@ import{
 export const getRestaurants =(keyword="") => async(dispatch) =>{
     try{
      dispatch(getRestaurantsRequest());
-     const {data} = await api.get(`/v1/eats/stores?keyword=${keyword}`);
+     // Only pass keyword if it's a real non-empty string (avoid sending "undefined" as a string)
+     const validKeyword = keyword && keyword !== "undefined" ? keyword : "";
+     const url = validKeyword
+       ? `/v1/eats/stores?keyword=${validKeyword}`
+       : `/v1/eats/stores`;
+     const {data} = await api.get(url);
      dispatch(getRestaurantsSuccess({
         restaurants:data.restaurant,
         count:data.count

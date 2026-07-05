@@ -2,7 +2,7 @@
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 const APIFeatures = require("../utils/apiFeatures")
-const buildReviewSummary = require("../utils/generateReviewSummary")
+const { generateReviewSummary, generateAISummary, generateFoodRecommendations } = require("../utils/generateReviewSummary")
 const Restaurant = require("../models/restaurant")
 
 
@@ -61,7 +61,8 @@ exports.generateReviewSummary = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("No Restaurant found with the ID", 404));
   }
 
-  const summary = buildReviewSummary(restaurant);
+  // Generate AI-powered summary and recommendations
+  const summary = await generateReviewSummary(restaurant);
 
   restaurant.reviewSentiment = summary.reviewSentiment;
   restaurant.reviewSummaryBullets = summary.reviewSummaryBullets;

@@ -1,3 +1,17 @@
+const Groq = require("groq-sdk");
+
+// Lazy-load Groq client to ensure env variables are loaded first
+let groqClient = null;
+
+const getGroqClient = () => {
+  if (!groqClient) {
+    groqClient = new Groq({
+      apiKey: process.env.GROQ_API_KEY,
+    });
+  }
+  return groqClient;
+};
+
 const CUISINE_KEYWORDS = {
   chaat: ["chaat", "streetfood", "tangy", "crispy"],
   biryani: ["biryani", "aromatic", "spicy", "flavorful"],
@@ -84,7 +98,96 @@ const analyzeReviewComments = (reviews = []) => {
   return { positiveHits, negativeHits, mentions: [...mentions].filter(Boolean).slice(0, 4) };
 };
 
-const generateReviewSummary = (restaurant) => {
+// AI-powered summary generation using Groq
+const generateAISummary = async (restaurant) => {
+  const {
+    name = "This restaurant",
+    ratings = 0,
+    numOfReviews = 0,
+    isVeg = false,
+    address = "",
+    reviews = [],
+  } = restaurant;
+
+  try {
+    const groq = getGroqClient();
+    const recentReviews = reviews
+      .slice(0, 10)
+      .map((r) => `${r.name} (${r.rating}/5): ${r.Comment}`)
+      .join("\n");
+
+    const prompt = `You are a restaurant review summarizer. Based on the following restaurant data, provide a brief, engaging summary with 2-3 key insights:
+
+Restaurant: ${name}
+Rating: ${ratings}/5 (${numOfReviews} reviews)
+Type: ${isVeg ? "Vegetarian" : "Mixed Menu"}
+Address: ${address}
+
+Recent Reviews:
+${recentReviews || "No reviews yet"}
+
+Provide 2-3 key insights as bullet points that would help customers decide if this restaurant is right for them. Be concise and specific.`;
+
+    const message = await groq.messages.create({
+      model: "mixtral-8x7b-32768",
+      max_tokens: 300,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    const aiSummary = message.content[0].type === "text" ? message.content[0].text : "";
+    return aiSummary;
+  } catch (error) {
+    console.error("Error generating AI summary:", error);
+    return null;
+  }
+};
+
+// Generate food recommendations using Groq
+const generateFoodRecommendations = async (restaurant) => {
+  const { name = "This restaurant", reviews = [] } = restaurant;
+
+  try {
+    const groq = getGroqClient();
+    const recentComments = reviews
+      .filter((r) => r.Comment)
+      .slice(0, 8)
+      .map((r) => r.Comment)
+      .join(" | ");
+
+    const prompt = `Based on these customer reviews about ${name} restaurant, identify and list the top 3-4 most mentioned/recommended dishes or food categories. Be specific and concise.
+
+Reviews: "${recentComments}"
+
+Format your response as a JSON array of recommended items with a brief reason for each, like: [{"item": "Biryani", "reason": "customers praise its aromatic flavor"}]`;
+
+    const message = await groq.messages.create({
+      model: "mixtral-8x7b-32768",
+      max_tokens: 250,
+      messages: [
+        {
+          role: "user",
+          content: prompt,
+        },
+      ],
+    });
+
+    const response = message.content[0].type === "text" ? message.content[0].text : "[]";
+    
+    // Extract JSON from response
+    const jsonMatch = response.match(/\[[\s\S]*\]/);
+    return jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+  } catch (error) {
+    console.error("Error generating food recommendations:", error);
+    return [];
+  }
+};
+
+const generateReviewSummary = async (restaurant) => {
   const {
     name = "This restaurant",
     ratings = 0,
@@ -102,7 +205,14 @@ const generateReviewSummary = (restaurant) => {
 
   const reviewSentiment = getSentimentLabel(sentimentScore);
 
-  const reviewSummaryBullets = [
+  // Get AI-powered summary
+  const aiSummary = await generateAISummary(restaurant);
+
+  // Get food recommendations
+  const foodRecommendations = await generateFoodRecommendations(restaurant);
+
+  // Fallback summary bullets if AI fails
+  const reviewSummaryBullets = aiSummary ? [aiSummary] : [
     `${name} holds a ${ratings}/5 rating from ${numOfReviews} customer reviews.`,
     numOfReviews >= 500
       ? "One of the most reviewed spots — strong crowd favourite."
@@ -112,30 +222,7 @@ const generateReviewSummary = (restaurant) => {
     isVeg
       ? "Pure veg menu — great for vegetarian diners."
       : "Mixed menu with popular non-veg specials.",
-    ratings >= 4.5
-      ? "Guests consistently praise taste and overall experience."
-      : ratings >= 4.0
-        ? "Generally well-liked with strong overall feedback."
-        : "Mixed feedback — some dishes stand out more than others.",
   ];
-
-  if (reviews.length > 0) {
-    const avgReviewRating =
-      reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / reviews.length;
-
-    reviewSummaryBullets.push(
-      `Recent reviewers average ${avgReviewRating.toFixed(1)}/5 across ${reviews.length} written reviews.`
-    );
-
-    const highlight = reviews.find((r) => (r.rating || 0) >= 4);
-    if (highlight?.Comment) {
-      reviewSummaryBullets.push(`"${highlight.Comment}" — ${highlight.name}`);
-    }
-  }
-
-  if (address) {
-    reviewSummaryBullets.push(`Conveniently located at ${address}.`);
-  }
 
   const cuisineTags = detectCuisineTags(name);
   const reviewTopMentions = [
@@ -146,7 +233,13 @@ const generateReviewSummary = (restaurant) => {
     reviewSentiment,
     reviewSummaryBullets: reviewSummaryBullets.slice(0, 5),
     reviewTopMentions,
+    aiSummary: aiSummary || null,
+    foodRecommendations: foodRecommendations || [],
   };
 };
 
-module.exports = generateReviewSummary;
+module.exports = {
+  generateReviewSummary,
+  generateAISummary,
+  generateFoodRecommendations,
+};

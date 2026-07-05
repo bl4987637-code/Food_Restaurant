@@ -4,10 +4,8 @@ const Cart = require("../models/cartModel");
 const { ObjectId } = require("mongodb");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors");
-const dotenv = require("dotenv");
 
-//setting up config file
-dotenv.config({ path: "./config/config.env" });
+// Stripe should be initialized with env vars already loaded by server.js
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // Create a new order   =>  /api/v1/order/new
